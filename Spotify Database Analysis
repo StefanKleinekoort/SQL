@@ -61,3 +61,19 @@ ROUND(AVG(danceability),2) AS average_danceability
 FROM BIT_DB.Spotifydata
 GROUP BY artist_name
 ORDER BY frequency desc
+
+#This code uses a temporary table and labels artists as "Top Star" if their average popularity is 90 or above, filtering and grouping data by artist name.
+WITH TempTable AS (
+SELECT artist_name, 
+AVG(popularity) AS average_popularity
+FROM Spotifydata
+GROUP BY artist_name
+HAVING average_popularity >= 90
+)
+SELECT artist_name, 
+average_popularity,
+CASE 
+WHEN average_popularity >= 90 THEN 'Top Star'
+ELSE 'Not Top Star'
+END AS status
+FROM TempTable;
